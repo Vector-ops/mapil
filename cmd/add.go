@@ -31,13 +31,13 @@ func addObj() {
 	}
 
 	keyPrompt := promptui.Prompt{
-		Label:     "Name of the Object: ",
+		Label:     "? Enter a name for the key:",
 		Templates: templates,
 		Validate:  validate,
 	}
 
 	valuePrompt := promptui.Prompt{
-		Label:     "Enter the value: ",
+		Label:     "? Enter the value:",
 		Templates: templates,
 		Validate:  validate,
 	}
@@ -56,4 +56,5 @@ func addObj() {
 
 	DataStore.AddValue(key, value)
 	DataStore.Persist()
+	fmt.Printf("'%s' successfully added to Mapil keyring.\n", key)
 }

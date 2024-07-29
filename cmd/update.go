@@ -17,9 +17,14 @@ var updCmd = &cobra.Command{
 }
 
 func updObj() {
+	keys := DataStore.GetKeys()
+	if len(keys) == 0 {
+		fmt.Println("Data store empty.")
+		return
+	}
 	selectPrompt := promptui.Select{
-		Label: "Select the key you want to update.",
-		Items: DataStore.GetKeys(),
+		Label: "? Choose a key to update:",
+		Items: keys,
 	}
 
 	_, key, err := selectPrompt.Run()
@@ -41,7 +46,7 @@ func updObj() {
 	}
 
 	valuePrompt := promptui.Prompt{
-		Label:     "Enter the new value: ",
+		Label:     "? Enter the new value: ",
 		Templates: templates,
 		Validate:  validate,
 	}
@@ -54,5 +59,5 @@ func updObj() {
 
 	DataStore.UpdateValue(key, value)
 	DataStore.Persist()
-	fmt.Println("Object updated")
+	fmt.Printf("'%s' updated.\n", key)
 }

@@ -17,9 +17,14 @@ var delCmd = &cobra.Command{
 }
 
 func delObj() {
+	keys := DataStore.GetKeys()
+	if len(keys) == 0 {
+		fmt.Println("Data store empty.")
+		return
+	}
 	keyPrompt := promptui.Select{
 		Label: "Select the key you want to delete.",
-		Items: DataStore.GetKeys(),
+		Items: keys,
 	}
 
 	_, key, err := keyPrompt.Run()
@@ -29,5 +34,5 @@ func delObj() {
 	}
 	DataStore.DeleteValue(key)
 	DataStore.Persist()
-	fmt.Println("Deleted object: ", key)
+	fmt.Printf("'%s' deleted.\n", key)
 }
