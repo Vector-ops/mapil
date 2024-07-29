@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path"
+	"runtime/debug"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -12,6 +13,8 @@ import (
 
 var (
 	DataStore *store.Store
+	info      debug.BuildInfo
+	version   string = "v0.1.0"
 
 	rootCmd = &cobra.Command{
 		Use:   "mapil",
@@ -32,9 +35,9 @@ func Execute(st *store.Store) {
 }
 
 func init() {
-
+	setVersion()
 	cobra.OnInitialize(initConfig)
-	rootCmd.Version = "Mapil CLI v0.1"
+	rootCmd.Version = info.Main.Version
 	rootCmd.AddCommand(versionCmd)
 	rootCmd.AddCommand(listCmd)
 	rootCmd.AddCommand(addCmd)
@@ -67,4 +70,18 @@ func createCfgFile(cfgDir string) {
 		panic(err)
 	}
 	defer f.Close()
+}
+
+func setVersion() {
+	if i, ok := debug.ReadBuildInfo(); ok {
+		if i.Main.Version != "(devel)" {
+			info = *i
+		} else {
+			info = debug.BuildInfo{
+				Main: debug.Module{
+					Version: version,
+				},
+			}
+		}
+	}
 }
