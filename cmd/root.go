@@ -14,7 +14,7 @@ import (
 var (
 	DataStore *store.Store
 	info      debug.BuildInfo
-	version   string = "v0.1.0"
+	version   string = "v0.1.1"
 
 	rootCmd = &cobra.Command{
 		Use:   "mapil",
