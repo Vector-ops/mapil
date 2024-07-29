@@ -3,8 +3,8 @@ package store
 import (
 	"fmt"
 
-	"github.com/vector-ops/mapil-cli/helpers"
-	"github.com/vector-ops/mapil-cli/types"
+	"github.com/vector-ops/mapil/helpers"
+	"github.com/vector-ops/mapil/types"
 )
 
 type Store struct {

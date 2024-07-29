@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/vector-ops/mapil-cli/cmd"
-	"github.com/vector-ops/mapil-cli/store"
+	"github.com/vector-ops/mapil/cmd"
+	"github.com/vector-ops/mapil/store"
 )
 
 func main() {

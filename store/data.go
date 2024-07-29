@@ -1,6 +1,6 @@
 package store
 
-import "github.com/vector-ops/mapil-cli/types"
+import "github.com/vector-ops/mapil/types"
 
 type Data struct {
 	List map[string]any `json:"list,omitempty"`

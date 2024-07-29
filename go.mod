@@ -1,4 +1,4 @@
-module github.com/vector-ops/mapil-cli
+module github.com/vector-ops/mapil
 
 go 1.22.4
 

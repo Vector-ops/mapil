@@ -6,7 +6,7 @@ import (
 	"os"
 	"path"
 
-	"github.com/vector-ops/mapil-cli/types"
+	"github.com/vector-ops/mapil/types"
 )
 
 const (

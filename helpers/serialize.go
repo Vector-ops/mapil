@@ -6,7 +6,7 @@ import (
 	"io"
 	"os"
 
-	"github.com/vector-ops/mapil-cli/types"
+	"github.com/vector-ops/mapil/types"
 )
 
 func Serialize(do []types.DataObject, file *os.File) error {

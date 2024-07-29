@@ -8,13 +8,13 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"github.com/vector-ops/mapil-cli/store"
+	"github.com/vector-ops/mapil/store"
 )
 
 var (
 	DataStore *store.Store
 	info      debug.BuildInfo
-	version   string = "v0.1.1"
+	version   string = "v0.1.2"
 
 	rootCmd = &cobra.Command{
 		Use:   "mapil",
