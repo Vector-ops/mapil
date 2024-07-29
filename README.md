@@ -54,7 +54,7 @@ Delete a key from your Mapil keyring. You'll be presented with a list of key nam
 
 ```bash
 mapil del
-mapil key -a
+mapil del -a
 ```
 
 ## Example
