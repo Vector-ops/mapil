@@ -17,6 +17,12 @@ var delCmd = &cobra.Command{
 }
 
 func delObj() {
+	if *delAll {
+		DataStore.DeleteAll()
+		DataStore.Persist()
+		fmt.Printf("Deleted all data.\n")
+		return
+	}
 	keys := DataStore.GetKeys()
 	if len(keys) == 0 {
 		fmt.Println("Data store empty.")
