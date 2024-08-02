@@ -14,7 +14,7 @@ import (
 var (
 	DataStore *store.Store
 	info      debug.BuildInfo
-	version   string = "v0.1.2"
+	version   string = "v0.1.3"
 
 	delAll *bool
 
