@@ -38,6 +38,13 @@ func (s *Store) DeleteValue(key string) {
 	s.data.DeleteObject(key)
 }
 
+func (s *Store) DeleteAll() {
+	keys := s.data.GetAllKeys()
+	for _, k := range keys {
+		s.data.DeleteObject(k)
+	}
+}
+
 func (s *Store) GetKeys() []string {
 	return s.data.GetAllKeys()
 }
