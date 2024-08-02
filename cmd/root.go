@@ -16,6 +16,8 @@ var (
 	info      debug.BuildInfo
 	version   string = "v0.1.2"
 
+	delAll *bool
+
 	rootCmd = &cobra.Command{
 		Use:   "mapil",
 		Short: "Mapil is used to store and access lists from CLI.",
@@ -43,6 +45,9 @@ func init() {
 	rootCmd.AddCommand(addCmd)
 	rootCmd.AddCommand(delCmd)
 	rootCmd.AddCommand(updCmd)
+
+	// Delete Flags
+	delAll = delCmd.PersistentFlags().BoolP("all", "a", true, "delete all the data in the data store.")
 }
 
 func initConfig() {
