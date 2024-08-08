@@ -80,3 +80,12 @@ MyKey deleted.
 $ mapil key list
 Data store empty.
 ```
+
+Upcoming features
+
+* [ ] Data synchronization with multiple devices 
+* [ ] Optional data encryption 
+* [ ] Import bookmarks and passwords
+* [ ] New datatype: List
+* [ ] Authentication
+* [ ] Optional cloud storage
