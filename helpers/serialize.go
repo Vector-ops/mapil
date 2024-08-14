@@ -2,28 +2,41 @@ package helpers
 
 import (
 	"encoding/json"
-	"errors"
-	"io"
-	"os"
 
-	"github.com/vector-ops/mapil/types"
+	"github.com/vector-ops/mapil/database"
 )
 
-func Serialize(do []types.DataObject, file *os.File) error {
-	file.Truncate(int64(file.Fd()))
-	enc := json.NewEncoder(file)
-	err := enc.Encode(do)
-	if err != nil {
-		return err
+func Serialize(data []database.KeyValue) ([]byte, error) {
+	buf := make([]byte, 0)
+
+	for _, kv := range data {
+		switch kv.(type) {
+		case database.ValueType:
+			vbuf, err := json.Marshal(kv)
+			if err != nil {
+				return nil, err
+			}
+			buf = append(buf, vbuf...)
+		case database.ListType:
+			lBuf, err := json.Marshal(kv)
+			if err != nil {
+				return nil, err
+			}
+			buf = append(buf, lBuf...)
+		}
 	}
-	return nil
+
+	return buf, nil
 }
 
-func Deserialize(file *os.File, do *[]types.DataObject) error {
-	dec := json.NewDecoder(file)
-	err := dec.Decode(do)
-	if err != nil && !errors.Is(err, io.EOF) {
-		return err
+func Deserialize(data []byte) ([]database.KeyValue, error) {
+	kvData := make([]database.KeyValue, 0)
+	err := json.Unmarshal(data, &kvData)
+	if err != nil {
+		return nil, err
 	}
-	return nil
+
+	return kvData, nil
 }
+
+// serialization and deseria;ization issue
