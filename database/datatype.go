@@ -2,6 +2,11 @@ package database
 
 import "encoding/json"
 
+const (
+	LIST_TYPE  = "list"
+	VALUE_TYPE = "value"
+)
+
 type KeyValue interface {
 	GetKey() string
 	GetValue() interface{}

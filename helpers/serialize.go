@@ -18,7 +18,7 @@ func Serialize(data []database.KeyValue) ([]byte, error) {
 				return nil, err
 			}
 			wrappedItems = append(wrappedItems, database.KVWrapper{
-				Type: "value",
+				Type: database.VALUE_TYPE,
 				Data: vbuf,
 			})
 		case database.ListType:
@@ -27,7 +27,7 @@ func Serialize(data []database.KeyValue) ([]byte, error) {
 				return nil, err
 			}
 			wrappedItems = append(wrappedItems, database.KVWrapper{
-				Type: "list",
+				Type: database.LIST_TYPE,
 				Data: lbuf,
 			})
 		}
@@ -52,14 +52,14 @@ func Deserialize(data []byte) ([]database.KeyValue, error) {
 	for _, item := range wrappedItems {
 		var obj database.KeyValue
 		switch item.Type {
-		case "value":
+		case database.VALUE_TYPE:
 			var vt database.ValueType
 			err = json.Unmarshal(item.Data, &vt)
 			if err != nil {
 				return nil, err
 			}
 			obj = vt
-		case "list":
+		case database.LIST_TYPE:
 			var lt database.ListType
 			err = json.Unmarshal(item.Data, &lt)
 			if err != nil {
@@ -67,6 +67,9 @@ func Deserialize(data []byte) ([]database.KeyValue, error) {
 			}
 			obj = lt
 		default:
+			if item.Type == "" {
+				return nil, fmt.Errorf("missing type field")
+			}
 			return nil, fmt.Errorf("unknown type: %s", item.Type)
 		}
 
