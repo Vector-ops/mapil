@@ -22,9 +22,18 @@ func updObj() {
 		fmt.Println("Data store empty.")
 		return
 	}
+
+	selectTemplates := &promptui.SelectTemplates{
+		Label:    "{{ . }}",
+		Active:   "> {{ . | green | underline }}",
+		Inactive: "  {{ . | cyan }}",
+		Selected: "{{ . | red | cyan }}",
+	}
+
 	selectPrompt := promptui.Select{
-		Label: "? Choose a key to update:",
-		Items: keys,
+		Label:     "? Choose a key to update:",
+		Items:     keys,
+		Templates: selectTemplates,
 	}
 
 	_, key, err := selectPrompt.Run()
