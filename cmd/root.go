@@ -14,7 +14,7 @@ import (
 var (
 	DataStore *store.Store
 	info      debug.BuildInfo
-	version   string = "v0.1.3"
+	version   string = "v1.0.0"
 
 	delAll *bool
 
@@ -47,7 +47,7 @@ func init() {
 	rootCmd.AddCommand(updCmd)
 
 	// Delete Flags
-	delAll = delCmd.PersistentFlags().BoolP("all", "a", true, "delete all the data in the data store.")
+	delAll = delCmd.PersistentFlags().BoolP("all", "a", false, "delete all the data in the data store.")
 }
 
 func initConfig() {
