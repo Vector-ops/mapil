@@ -1,7 +1,7 @@
 package helpers
 
 import (
-	"fmt"
+	"reflect"
 	"testing"
 
 	"github.com/vector-ops/mapil/database"
@@ -10,7 +10,7 @@ import (
 func TestSerializeData(t *testing.T) {
 	data := []database.KeyValue{
 		database.ListType{
-			Key: "lsit1",
+			Key: "list1",
 			Value: []string{
 				"value1",
 				"value2",
@@ -22,7 +22,7 @@ func TestSerializeData(t *testing.T) {
 		},
 	}
 
-	expected := `{"key":"list1","value":["value1","value2"]}{"key":"key1","value":"value1"}`
+	expected := `[{"type":"list","data":{"key":"list1","value":["value1","value2"]}},{"type":"value","data":{"key":"key1","value":"value1"}}]`
 
 	jBuf, err := Serialize(data)
 	if err != nil {
@@ -31,31 +31,23 @@ func TestSerializeData(t *testing.T) {
 	if jBuf == nil {
 		t.Fatalf("Nothing in buffer.")
 	}
-	fmt.Println(string(jBuf))
-	fmt.Println(expected)
 	if string(jBuf) != expected {
-		t.Fatalf("Data does not match.")
+		t.Fatalf("Data does not match.\nexpected: %s\ngot: %s", expected, string(jBuf))
 	}
 }
 
 func TestDeserializeData(t *testing.T) {
-	data := []database.KeyValue{
+	jBuf := []byte(`[{"type":"list","data":{"key":"list1","value":["value1","value2"]}},{"type":"value","data":{"key":"key1","value":"value1"}}]`)
+
+	expected := []database.KeyValue{
 		database.ListType{
-			Key: "lsit1",
-			Value: []string{
-				"value1",
-				"value2",
-			},
+			Key:   "list1",
+			Value: []string{"value1", "value2"},
 		},
 		database.ValueType{
 			Key:   "key1",
 			Value: "value1",
 		},
-	}
-
-	jBuf, err := Serialize(data)
-	if err != nil {
-		t.Fatal(err)
 	}
 
 	kv, err := Deserialize(jBuf)
@@ -64,5 +56,8 @@ func TestDeserializeData(t *testing.T) {
 	}
 	if len(kv) == 0 {
 		t.Fatal("failed to unmarshall")
+	}
+	if !reflect.DeepEqual(expected, kv) {
+		t.Fatalf("structs not equal\ngot: %+v\nexpected: %+v", kv, expected)
 	}
 }
