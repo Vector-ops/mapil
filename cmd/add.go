@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/manifoldco/promptui"
 	"github.com/spf13/cobra"
@@ -25,8 +26,8 @@ func addObj() {
 	}
 	templates := &promptui.PromptTemplates{
 		Prompt:  "{{ . }} ",
-		Valid:   "{{ . | green }} ",
-		Invalid: "{{ . | red }} ",
+		Valid:   "{{ . | bold }} ",
+		Invalid: "{{ . | bold }} ",
 		Success: "{{ . | green }} ",
 	}
 
@@ -54,7 +55,17 @@ func addObj() {
 		return
 	}
 
-	DataStore.AddValue(key, value)
+	if strings.Contains(value, ",") {
+		vals := strings.Split(value, ",")
+		for i := 0; i < len(vals); i++ {
+			vals[i] = strings.TrimSpace(vals[i])
+		}
+
+		DataStore.AddList(key, vals)
+	} else {
+		DataStore.AddValue(key, value)
+	}
+
 	DataStore.Persist()
 	fmt.Printf("'%s' successfully added to Mapil keyring.\n", key)
 }
