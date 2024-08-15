@@ -1,5 +1,7 @@
 package database
 
+import "encoding/json"
+
 type KeyValue interface {
 	GetKey() string
 	GetValue() interface{}
@@ -26,4 +28,9 @@ func (lt ListType) GetKey() string {
 }
 func (lt ListType) GetValue() interface{} {
 	return lt.Value
+}
+
+type KVWrapper struct {
+	Type string          `json:"type,omitempty"`
+	Data json.RawMessage `json:"data,omitempty"`
 }
