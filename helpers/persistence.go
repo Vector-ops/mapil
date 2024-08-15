@@ -29,9 +29,7 @@ func NewFileObjectWithFile(filePath string) *File {
 }
 
 func (f *File) Init() {
-	// home, err := os.UserConfigDir()
-
-	home, err := os.Getwd()
+	home, err := os.UserConfigDir()
 	if err != nil {
 		fmt.Println("failed to create data file. ", err)
 	}
