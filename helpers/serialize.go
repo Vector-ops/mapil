@@ -3,6 +3,8 @@ package helpers
 import (
 	"encoding/json"
 	"fmt"
+	"io"
+	"os"
 
 	"github.com/vector-ops/mapil/database"
 )
@@ -77,4 +79,16 @@ func Deserialize(data []byte) ([]database.KeyValue, error) {
 	}
 
 	return result, nil
+}
+
+func DeserializeFile(file *os.File) ([]database.KeyValue, error) {
+	var data []byte
+	data, err := io.ReadAll(file)
+	if err != nil {
+		return nil, err
+	}
+	if len(data) == 0 {
+		return nil, fmt.Errorf("no data in file")
+	}
+	return Deserialize(data)
 }
