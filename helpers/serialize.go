@@ -2,12 +2,13 @@ package helpers
 
 import (
 	"encoding/json"
+	"fmt"
 
 	"github.com/vector-ops/mapil/database"
 )
 
 func Serialize(data []database.KeyValue) ([]byte, error) {
-	buf := make([]byte, 0)
+	var wrappedItems []database.KVWrapper
 
 	for _, kv := range data {
 		switch kv.(type) {
@@ -16,27 +17,61 @@ func Serialize(data []database.KeyValue) ([]byte, error) {
 			if err != nil {
 				return nil, err
 			}
-			buf = append(buf, vbuf...)
+			wrappedItems = append(wrappedItems, database.KVWrapper{
+				Type: "value",
+				Data: vbuf,
+			})
 		case database.ListType:
-			lBuf, err := json.Marshal(kv)
+			lbuf, err := json.Marshal(kv)
 			if err != nil {
 				return nil, err
 			}
-			buf = append(buf, lBuf...)
+			wrappedItems = append(wrappedItems, database.KVWrapper{
+				Type: "list",
+				Data: lbuf,
+			})
 		}
 	}
 
+	buf, err := json.Marshal(wrappedItems)
+	if err != nil {
+		return nil, err
+	}
 	return buf, nil
 }
 
 func Deserialize(data []byte) ([]database.KeyValue, error) {
-	kvData := make([]database.KeyValue, 0)
-	err := json.Unmarshal(data, &kvData)
+	var wrappedItems []database.KVWrapper
+	err := json.Unmarshal(data, &wrappedItems)
 	if err != nil {
 		return nil, err
 	}
 
-	return kvData, nil
-}
+	var result []database.KeyValue
 
-// serialization and deseria;ization issue
+	for _, item := range wrappedItems {
+		var obj database.KeyValue
+		switch item.Type {
+		case "value":
+			var vt database.ValueType
+			err = json.Unmarshal(item.Data, &vt)
+			if err != nil {
+				return nil, err
+			}
+			obj = vt
+		case "list":
+			var lt database.ListType
+			err = json.Unmarshal(item.Data, &lt)
+			if err != nil {
+				return nil, err
+			}
+			obj = lt
+		default:
+			return nil, fmt.Errorf("unknown type: %s", item.Type)
+		}
+
+		result = append(result, obj)
+	}
+
+	return result, nil
+}
