@@ -1,6 +1,7 @@
 package helpers
 
 import (
+	"os"
 	"reflect"
 	"testing"
 
@@ -59,5 +60,39 @@ func TestDeserializeData(t *testing.T) {
 	}
 	if !reflect.DeepEqual(expected, kv) {
 		t.Fatalf("structs not equal\ngot: %+v\nexpected: %+v", kv, expected)
+	}
+}
+
+func TestDeserializeFile(t *testing.T) {
+	fpath := "../mapil/mapil.json"
+
+	file, err := os.Open(fpath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer file.Close()
+
+	expected := []database.KeyValue{
+		database.ValueType{
+			Key:   "wall",
+			Value: "gang",
+		},
+		database.ListType{
+			Key:   "dell",
+			Value: []string{"geng", "random", "list"},
+		},
+		database.ValueType{
+			Key:   "shell",
+			Value: "gang",
+		},
+	}
+
+	got, err := DeserializeFile(file)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if !reflect.DeepEqual(expected, got) {
+		t.Fatalf("Expected: %+v\nGot: %+v", expected, got)
 	}
 }
