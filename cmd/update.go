@@ -2,9 +2,11 @@ package cmd
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/manifoldco/promptui"
 	"github.com/spf13/cobra"
+	"github.com/vector-ops/mapil/helpers"
 )
 
 var updCmd = &cobra.Command{
@@ -38,7 +40,7 @@ func updObj() {
 
 	_, key, err := selectPrompt.Run()
 	if err != nil {
-		fmt.Println("error while running ", err)
+		fmt.Printf("Prompt cancelled %s\n", err)
 		return
 	}
 	validate := func(input string) error {
@@ -49,8 +51,8 @@ func updObj() {
 	}
 	templates := &promptui.PromptTemplates{
 		Prompt:  "{{ . }} ",
-		Valid:   "{{ . | green }} ",
-		Invalid: "{{ . | red }} ",
+		Valid:   "{{ . | bold }} ",
+		Invalid: "{{ . | bold }} ",
 		Success: "{{ . | green }} ",
 	}
 
@@ -62,11 +64,21 @@ func updObj() {
 
 	value, err := valuePrompt.Run()
 	if err != nil {
-		fmt.Printf("Prompt failed %v\n", err)
+		fmt.Printf("Prompt cancelled %s\n", err)
 		return
 	}
 
-	DataStore.UpdateValue(key, value)
-	DataStore.Persist()
+	if strings.Contains(value, ",") {
+		vals := helpers.CleanInput(value)
+
+		DataStore.UpdateList(key, vals)
+	} else {
+		DataStore.UpdateValue(key, value)
+	}
+
+	err = DataStore.Persist()
+	if err != nil {
+		fmt.Println(err)
+	}
 	fmt.Printf("'%s' updated.\n", key)
 }

@@ -44,10 +44,13 @@ func delObj() {
 
 	_, key, err := keyPrompt.Run()
 	if err != nil {
-		fmt.Println("error while running ", err)
+		fmt.Println("Prompt cancelled")
 		return
 	}
 	DataStore.DeleteValue(key)
-	DataStore.Persist()
+	err = DataStore.Persist()
+	if err != nil {
+		fmt.Println(err)
+	}
 	fmt.Printf("'%s' deleted.\n", key)
 }

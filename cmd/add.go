@@ -6,6 +6,7 @@ import (
 
 	"github.com/manifoldco/promptui"
 	"github.com/spf13/cobra"
+	"github.com/vector-ops/mapil/helpers"
 )
 
 var addCmd = &cobra.Command{
@@ -46,26 +47,26 @@ func addObj() {
 	key, err := keyPrompt.Run()
 
 	if err != nil {
-		fmt.Printf("Prompt failed %v\n", err)
+		fmt.Printf("Prompt cancelled %s\n", err)
 		return
 	}
 	value, err := valuePrompt.Run()
 	if err != nil {
-		fmt.Printf("Prompt failed %v\n", err)
+		fmt.Printf("Prompt cancelled %s\n", err)
 		return
 	}
 
 	if strings.Contains(value, ",") {
-		vals := strings.Split(value, ",")
-		for i := 0; i < len(vals); i++ {
-			vals[i] = strings.TrimSpace(vals[i])
-		}
+		vals := helpers.CleanInput(value)
 
 		DataStore.AddList(key, vals)
 	} else {
 		DataStore.AddValue(key, value)
 	}
 
-	DataStore.Persist()
+	err = DataStore.Persist()
+	if err != nil {
+		fmt.Println(err)
+	}
 	fmt.Printf("'%s' successfully added to Mapil keyring.\n", key)
 }
