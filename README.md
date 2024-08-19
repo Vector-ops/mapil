@@ -89,3 +89,4 @@ Upcoming features
 - [ ] New datatype: List
 - [ ] Authentication
 - [ ] Optional cloud storage
+- [ ] Data backup
