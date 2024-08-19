@@ -28,10 +28,10 @@ func NewFileObjectWithFile(filePath string) *File {
 	}
 }
 
-func (f *File) Init() {
+func (f *File) Init() error {
 	home, err := os.UserConfigDir()
 	if err != nil {
-		fmt.Println("failed to create data file. ", err)
+		return fmt.Errorf("failed to create data file\n%s", err)
 	}
 
 	dirPath := path.Join(home, dir)
@@ -42,12 +42,14 @@ func (f *File) Init() {
 
 	if !checkDirExists(dirPath) {
 		if err := createDir(dirPath); err != nil {
-			fmt.Println("failed to create data file. ", err)
+			return fmt.Errorf("failed to create data file\n%s", err)
 		}
 	}
 	if err := f.CreateFile(); err != nil {
-		fmt.Println("failed to create data file. ", err)
+		return fmt.Errorf("failed to create data file\n%s", err)
 	}
+
+	return nil
 }
 
 func (f *File) CreateFile() error {
@@ -78,11 +80,6 @@ func (f *File) LoadFile() ([]database.KeyValue, error) {
 	defer file.Close()
 	data, err = DeserializeFile(file)
 	if err != nil {
-		fmt.Println(err)
-	}
-
-	if err != nil {
-		fmt.Println(err)
 		return nil, err
 	}
 

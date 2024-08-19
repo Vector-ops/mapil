@@ -20,9 +20,9 @@ func NewStore() *Store {
 	}
 }
 
-func (s *Store) Init() {
+func (s *Store) Init() error {
 	s.file.Init()
-	s.LoadData()
+	return s.LoadData()
 }
 
 func (s *Store) AddValue(key string, value string) {
@@ -81,19 +81,21 @@ func (s *Store) GetAllData() []DataObject {
 	return do
 }
 
-func (s *Store) LoadData() {
+func (s *Store) LoadData() error {
 	data, err := s.file.LoadFile()
 	if err != nil {
-		fmt.Println("Failed to load data file.")
+		return fmt.Errorf("failed to load data file")
 	}
 	for _, v := range data {
 		s.data.AddObject(v)
 	}
+	return nil
 }
 
-func (s *Store) Persist() {
+func (s *Store) Persist() error {
 	err := s.file.SaveFile(s.data.GetAllObjects())
 	if err != nil {
-		fmt.Println("Failed to save file")
+		return fmt.Errorf("failed to save file")
 	}
+	return nil
 }
