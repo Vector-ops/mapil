@@ -12,7 +12,7 @@ Mapil is still in development, and more features (like data encryption, authenti
 
 To get started, make sure you have Go installed on your system. Then, install Mapil globally using go install:
 
-** So far it is only tested on linux machine. It may not work as intended on other platforms. **
+**So far it is only tested on linux machine. It may not work as intended on other platforms.**
 
 If you install from the releases page make sure you place the binary in a directory that is in your $PATH so you can run the commands easily.
 
