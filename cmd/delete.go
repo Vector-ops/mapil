@@ -28,17 +28,29 @@ func delObj() {
 		fmt.Println("Data store empty.")
 		return
 	}
+
+	templates := &promptui.SelectTemplates{
+		Label:    "{{ . }}",
+		Active:   "> {{ . | green | underline }}",
+		Inactive: "  {{ . | cyan }}",
+		Selected: "{{ . | red | cyan }}",
+	}
+
 	keyPrompt := promptui.Select{
-		Label: "Select the key you want to delete.",
-		Items: keys,
+		Label:     "Select the key you want to delete.",
+		Items:     keys,
+		Templates: templates,
 	}
 
 	_, key, err := keyPrompt.Run()
 	if err != nil {
-		fmt.Println("error while running ", err)
+		fmt.Println("Prompt cancelled")
 		return
 	}
 	DataStore.DeleteValue(key)
-	DataStore.Persist()
+	err = DataStore.Persist()
+	if err != nil {
+		fmt.Println(err)
+	}
 	fmt.Printf("'%s' deleted.\n", key)
 }
