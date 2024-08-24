@@ -6,7 +6,7 @@
 
 Mapil is a command-line tool built with Golang, designed to simplify the management of your data. With Mapil, you can store, retrieve, update, and delete small pieces of data as key-value or key-list pairs with ease, all from the command line. You can use Mapil to store bookmarks, passwords, API keys, URLs or any other key-value data you need to manage.
 
-Mapil is still in development, and more features (like data encryption, authentication, data sync etc.) will be added in the future. If you have any suggestions or feedback, please feel free to open an issue or submit a pull request.
+Mapil is still in development, and more features (like data encryption, authentication, data sync etc.) will be added in the future. If you have any suggestions or feedback, please feel free to open an issue.
 
 ## Installation
 
