@@ -5,9 +5,14 @@ import (
 	"github.com/vector-ops/mapil/store"
 )
 
-func main() {
+var devMode string
 
-	store := store.NewStore()
+func main() {
+	dev := false
+	if devMode == "true" {
+		dev = true
+	}
+	store := store.NewStore(dev)
 	store.Init()
 
 	cmd.Execute(store)

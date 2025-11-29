@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"fmt"
-	"strings"
 
 	"github.com/manifoldco/promptui"
 	"github.com/spf13/cobra"
@@ -45,7 +44,6 @@ func addObj() {
 	}
 
 	key, err := keyPrompt.Run()
-
 	if err != nil {
 		fmt.Printf("Prompt cancelled %s\n", err)
 		return
@@ -56,13 +54,9 @@ func addObj() {
 		return
 	}
 
-	if strings.Contains(value, ",") {
-		vals := helpers.CleanInput(value)
+	vals := helpers.CleanInput(value)
 
-		DataStore.AddList(key, vals)
-	} else {
-		DataStore.AddValue(key, value)
-	}
+	DataStore.AddList(key, vals)
 
 	err = DataStore.Persist()
 	if err != nil {

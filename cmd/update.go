@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"fmt"
-	"strings"
 
 	"github.com/manifoldco/promptui"
 	"github.com/spf13/cobra"
@@ -68,13 +67,9 @@ func updObj() {
 		return
 	}
 
-	if strings.Contains(value, ",") {
-		vals := helpers.CleanInput(value)
+	vals := helpers.CleanInput(value)
 
-		DataStore.UpdateList(key, vals)
-	} else {
-		DataStore.UpdateValue(key, value)
-	}
+	DataStore.UpdateList(key, vals)
 
 	err = DataStore.Persist()
 	if err != nil {

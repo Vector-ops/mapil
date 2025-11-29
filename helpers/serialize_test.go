@@ -17,10 +17,6 @@ func TestSerializeData(t *testing.T) {
 				"value2",
 			},
 		},
-		database.ValueType{
-			Key:   "key1",
-			Value: "value1",
-		},
 	}
 
 	expected := `[{"type":"list","data":{"key":"list1","value":["value1","value2"]}},{"type":"value","data":{"key":"key1","value":"value1"}}]`
@@ -44,10 +40,6 @@ func TestDeserializeData(t *testing.T) {
 		database.ListType{
 			Key:   "list1",
 			Value: []string{"value1", "value2"},
-		},
-		database.ValueType{
-			Key:   "key1",
-			Value: "value1",
 		},
 	}
 
@@ -73,17 +65,9 @@ func TestDeserializeFile(t *testing.T) {
 	defer file.Close()
 
 	expected := []database.KeyValue{
-		database.ValueType{
-			Key:   "wall",
-			Value: "gang",
-		},
 		database.ListType{
 			Key:   "dell",
 			Value: []string{"geng", "random", "list"},
-		},
-		database.ValueType{
-			Key:   "shell",
-			Value: "gang",
 		},
 	}
 

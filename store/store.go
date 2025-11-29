@@ -2,6 +2,8 @@ package store
 
 import (
 	"fmt"
+	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/vector-ops/mapil/database"
@@ -13,10 +15,25 @@ type Store struct {
 	file *helpers.File
 }
 
-func NewStore() *Store {
+func NewStore(devMode bool) *Store {
+	var file *helpers.File
+
+	if devMode {
+		curDir, err := os.Getwd()
+		if err != nil {
+			curDir = "."
+		}
+
+		filePath := filepath.Join(curDir, "mapil.json")
+
+		file = helpers.NewFileObjectWithFile(filePath)
+	} else {
+		file = helpers.NewFileObject()
+	}
+
 	return &Store{
 		data: database.NewDatabase(),
-		file: helpers.NewFileObject(),
+		file: file,
 	}
 }
 
@@ -25,16 +42,8 @@ func (s *Store) Init() error {
 	return s.LoadData()
 }
 
-func (s *Store) AddValue(key string, value string) {
-	s.data.AddObject(database.ValueType{Key: key, Value: value})
-}
-
 func (s *Store) AddList(key string, value []string) {
 	s.data.AddObject(database.ListType{Key: key, Value: value})
-}
-
-func (s *Store) UpdateValue(key string, value string) {
-	s.data.UpdateObject(database.ValueType{Key: key, Value: value})
 }
 
 func (s *Store) UpdateList(key string, value []string) {
@@ -66,11 +75,6 @@ func (s *Store) GetAllData() []DataObject {
 	var do []DataObject
 	for _, kv := range data {
 		switch kv.(type) {
-		case database.ValueType:
-			do = append(do, DataObject{
-				Key:   kv.GetKey(),
-				Value: kv.GetValue().(string),
-			})
 		case database.ListType:
 			do = append(do, DataObject{
 				Key:   kv.GetKey(),

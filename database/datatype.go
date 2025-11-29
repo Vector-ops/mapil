@@ -3,18 +3,13 @@ package database
 import "encoding/json"
 
 const (
-	LIST_TYPE  = "list"
-	VALUE_TYPE = "value"
+	LIST_TYPE = "list"
 )
 
 type KeyValue interface {
 	GetKey() string
 	GetValue() interface{}
-}
-
-type ValueType struct {
-	Key   string `json:"key,omitempty"`
-	Value string `json:"value,omitempty"`
+	GetType() string
 }
 
 type ListType struct {
@@ -22,17 +17,16 @@ type ListType struct {
 	Value []string `json:"value,omitempty"`
 }
 
-func (vt ValueType) GetKey() string {
-	return vt.Key
-}
-func (vt ValueType) GetValue() interface{} {
-	return vt.Value
-}
 func (lt ListType) GetKey() string {
 	return lt.Key
 }
+
 func (lt ListType) GetValue() interface{} {
 	return lt.Value
+}
+
+func (lt ListType) GetType() string {
+	return LIST_TYPE
 }
 
 type KVWrapper struct {

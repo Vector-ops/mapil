@@ -2,7 +2,6 @@ package helpers
 
 import (
 	"fmt"
-
 	"os"
 	"path"
 
@@ -53,7 +52,6 @@ func (f *File) Init() error {
 }
 
 func (f *File) CreateFile() error {
-
 	file, err := os.OpenFile(f.filePath, os.O_CREATE, os.ModePerm)
 	if err != nil {
 		return err
@@ -61,7 +59,6 @@ func (f *File) CreateFile() error {
 	defer file.Close()
 
 	return nil
-
 }
 
 func (f *File) SaveFile(data []database.KeyValue) error {
@@ -110,7 +107,7 @@ func writeToFile(data []database.KeyValue, filePath string) error {
 }
 
 func createDir(dirPath string) error {
-	err := os.Mkdir(dirPath, 0777)
+	err := os.Mkdir(dirPath, 0o777)
 	if err != nil {
 		return err
 	}

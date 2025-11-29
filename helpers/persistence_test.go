@@ -17,17 +17,9 @@ func TestLoadFile(t *testing.T) {
 	}
 
 	expected := []database.KeyValue{
-		database.ValueType{
-			Key:   "wall",
-			Value: "gang",
-		},
 		database.ListType{
 			Key:   "dell",
 			Value: []string{"geng", "random", "list"},
-		},
-		database.ValueType{
-			Key:   "shell",
-			Value: "gang",
 		},
 	}
 
@@ -41,17 +33,9 @@ func TestSaveFile(t *testing.T) {
 	file.Init()
 
 	data := []database.KeyValue{
-		database.ValueType{
-			Key:   "test1",
-			Value: "testvalue1",
-		},
 		database.ListType{
 			Key:   "dell",
 			Value: []string{"geng", "random", "list"},
-		},
-		database.ValueType{
-			Key:   "shell",
-			Value: "gang",
 		},
 	}
 	err := file.SaveFile(data)
