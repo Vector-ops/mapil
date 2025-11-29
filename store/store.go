@@ -1,6 +1,7 @@
 package store
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -9,6 +10,8 @@ import (
 	"github.com/vector-ops/mapil/database"
 	"github.com/vector-ops/mapil/helpers"
 )
+
+var ErrUnsupportedValue = errors.New("unsupported value")
 
 type Store struct {
 	data *database.Database
@@ -42,12 +45,21 @@ func (s *Store) Init() error {
 	return s.LoadData()
 }
 
-func (s *Store) AddList(key string, value []string) {
-	s.data.AddObject(database.ListType{Key: key, Value: value})
+func (s *Store) AddList(key string, value []string) error {
+	return s.data.AddObject(database.ListType{Key: key, Value: value})
 }
 
-func (s *Store) UpdateList(key string, value []string) {
-	s.data.UpdateObject(database.ListType{Key: key, Value: value})
+func (s *Store) UpdateList(key string, value []string) error {
+	return s.data.UpdateObject(database.ListType{Key: key, Value: value})
+}
+
+func (s *Store) AppendList(key string, value []string) error {
+	existingValues, err := s.GetValue(key)
+	if err != nil {
+		return err
+	}
+	existingValues = append(existingValues, value...)
+	return s.UpdateList(key, existingValues)
 }
 
 func (s *Store) DeleteValue(key string) {
@@ -58,6 +70,20 @@ func (s *Store) DeleteAll() {
 	keys := s.data.GetAllKeys()
 	for _, k := range keys {
 		s.data.DeleteObject(k)
+	}
+}
+
+func (s *Store) GetValue(key string) ([]string, error) {
+	keyval, err := s.data.GetObject(key)
+	if err != nil {
+		return nil, err
+	}
+
+	switch keyval.GetType() {
+	case database.LIST_TYPE:
+		return keyval.GetValue().([]string), nil
+	default:
+		return nil, ErrUnsupportedValue
 	}
 }
 
