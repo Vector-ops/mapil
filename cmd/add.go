@@ -61,6 +61,7 @@ func addObj() {
 	err = DataStore.Persist()
 	if err != nil {
 		fmt.Println(err)
+		return
 	}
 	fmt.Printf("'%s' successfully added to Mapil keyring.\n", key)
 }
