@@ -1,19 +1,14 @@
 SHELL := /bin/zsh
 
-# The name of the executable (default is current directory name)
-# TARGET := bin/$(shell echo $${PWD\#\#*/})
-# .DEFAULT_GOAL: bin/$(TARGET)
-
 TARGET := bin/mapil
 
-# These will be provided to the target
-# VERSION := 0.1.3
-# BUILD := `git rev-parse HEAD`
-
-# Use linker flags to provide version/build settings to the target
 LDFLAGS=-ldflags "-X=main.Version=$(VERSION) -X=main.Build=$(BUILD)"
+ifeq ($(GO_ENV),production)
+LDFLAGS += -ldflags "-X=main.devMode=false"
+else
+LDFLAGS += -ldflags "-X=main.devMode=true"
+endif
 
-# go source files, ignore vendor directory
 SRC = $(shell find . -type f -name '*.go' -not -path "./vendor/*")
 
 .PHONY: all build clean install uninstall fmt simplify check run
