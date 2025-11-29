@@ -23,7 +23,6 @@ var (
 		Short: "Mapil is used to store and access lists from CLI.",
 		Long:  `Mapil is a CLI based tool to store and view lists on the command line. It allows you to create different lists on the command line and store api keys, bookmarks, todo lists etc.`,
 		Run: func(cmd *cobra.Command, args []string) {
-
 		},
 	}
 )
@@ -45,6 +44,7 @@ func init() {
 	rootCmd.AddCommand(addCmd)
 	rootCmd.AddCommand(delCmd)
 	rootCmd.AddCommand(updCmd)
+	rootCmd.AddCommand(apdCmd)
 
 	// Delete Flags
 	delAll = delCmd.PersistentFlags().BoolP("all", "a", false, "delete all the data in the data store.")
