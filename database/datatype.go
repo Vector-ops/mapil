@@ -13,8 +13,8 @@ type KeyValue interface {
 }
 
 type ListType struct {
-	Key   string   `json:"key,omitempty"`
-	Value []string `json:"value,omitempty"`
+	Key   string   `json:"key"`
+	Value []string `json:"value"`
 }
 
 func (lt ListType) GetKey() string {
@@ -30,6 +30,6 @@ func (lt ListType) GetType() string {
 }
 
 type KVWrapper struct {
-	Type string          `json:"type,omitempty"`
-	Data json.RawMessage `json:"data,omitempty"`
+	Type string          `json:"type"`
+	Data json.RawMessage `json:"data"`
 }
