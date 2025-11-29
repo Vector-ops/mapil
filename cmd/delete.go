@@ -51,6 +51,7 @@ func delObj() {
 	err = DataStore.Persist()
 	if err != nil {
 		fmt.Println(err)
+		return
 	}
 	fmt.Printf("'%s' deleted.\n", key)
 }

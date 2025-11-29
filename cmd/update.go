@@ -74,6 +74,7 @@ func updObj() {
 	err = DataStore.Persist()
 	if err != nil {
 		fmt.Println(err)
+		return
 	}
 	fmt.Printf("'%s' updated.\n", key)
 }
