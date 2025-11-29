@@ -1,6 +1,13 @@
 package database
 
-import "fmt"
+import (
+	"errors"
+)
+
+var (
+	ErrKeyDoesNotExist = errors.New("key does not exist")
+	ErrConflictingKeys = errors.New("key already exists")
+)
 
 type Database struct {
 	List map[string]KeyValue `json:"list,omitempty"`
@@ -14,7 +21,7 @@ func NewDatabase() *Database {
 
 func (d *Database) AddObject(kv KeyValue) error {
 	if _, ok := d.List[kv.GetKey()]; ok {
-		return fmt.Errorf("key already exists")
+		return ErrConflictingKeys
 	}
 	d.List[kv.GetKey()] = kv
 	return nil
@@ -25,21 +32,21 @@ func (d *Database) UpdateObject(kv KeyValue) error {
 		d.List[kv.GetKey()] = kv
 		return nil
 	}
-	return fmt.Errorf("key does not exist")
+	return ErrKeyDoesNotExist
 }
 
 func (d *Database) GetObject(key string) (KeyValue, error) {
 	if kv, ok := d.List[key]; ok {
 		return kv, nil
 	}
-	return nil, fmt.Errorf("key does not exist")
+	return nil, ErrKeyDoesNotExist
 }
 
 func (d *Database) GetValue(key string) (interface{}, error) {
 	if kv, ok := d.List[key]; ok {
 		return kv.GetValue(), nil
 	}
-	return nil, fmt.Errorf("key does not exist")
+	return nil, ErrKeyDoesNotExist
 }
 
 func (d *Database) GetAllObjects() []KeyValue {
