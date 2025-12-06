@@ -2,6 +2,9 @@ SHELL := /bin/zsh
 
 TARGET := bin/mapil
 
+VERSION := $(shell git describe --tags --abbrev=0 2>/dev/null || git rev-parse --short HEAD)
+BUILD := $(shell date +%Y-%m-%dT%H:%M:%S%z)
+
 LDFLAGS=-ldflags "-X=main.Version=$(VERSION) -X=main.Build=$(BUILD)"
 ifeq ($(GO_ENV),production)
 LDFLAGS += -ldflags "-X=main.devMode=false"
