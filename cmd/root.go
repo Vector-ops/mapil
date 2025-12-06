@@ -14,7 +14,7 @@ import (
 var (
 	DataStore *store.Store
 	info      debug.BuildInfo
-	version   string = "v1.0.2"
+	Version   string
 
 	delAll *bool
 
@@ -45,6 +45,7 @@ func init() {
 	rootCmd.AddCommand(delCmd)
 	rootCmd.AddCommand(updCmd)
 	rootCmd.AddCommand(apdCmd)
+	rootCmd.AddCommand(getCmd)
 
 	// Delete Flags
 	delAll = delCmd.PersistentFlags().BoolP("all", "a", false, "delete all the data in the data store.")
@@ -84,7 +85,7 @@ func setVersion() {
 		} else {
 			info = debug.BuildInfo{
 				Main: debug.Module{
-					Version: version,
+					Version: Version,
 				},
 			}
 		}
